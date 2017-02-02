@@ -20,16 +20,18 @@ if __name__ == '__main__':
 
     for track in mid.tracks:
         new_track = MidiTrack()
-
-        for message in track:
-            if isinstance(message, MetaMessage):
-                new_track.append(message)
-            else:
-                if 'note' in dir(message):
-                    inverted_note = basenote - (message.note - basenote)
-                    new_track.append(message.copy(note=inverted_note, time=int(message.time * 2)))
-                else:
+        if 'drum' in track.name.lower():
+            new_track = track
+        else:
+            for message in track:
+                if isinstance(message, MetaMessage):
                     new_track.append(message)
+                else:
+                    if 'note' in dir(message):
+                        inverted_note = basenote - (message.note - basenote)
+                        new_track.append(message.copy(note=inverted_note, time=int(1.0 * message.time)))
+                    else:
+                        new_track.append(message)
 
         inverted.tracks.append(new_track)
 
