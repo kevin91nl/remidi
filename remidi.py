@@ -29,7 +29,7 @@ if __name__ == '__main__':
                 else:
                     if 'note' in dir(message):
                         inverted_note = basenote - (message.note - basenote)
-                        new_track.append(message.copy(note=inverted_note, time=int(2 * message.time)))
+                        new_track.append(message.copy(note=inverted_note, time=int(message.time)))
                     else:
                         new_track.append(message)
 
