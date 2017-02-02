@@ -1,3 +1,4 @@
+from mido import MetaMessage
 from mido import MidiFile
 from mido import MidiTrack
 import argparse
@@ -21,11 +22,14 @@ if __name__ == '__main__':
         new_track = MidiTrack()
 
         for message in track:
-            if 'note' in dir(message):
-                inverted_note = basenote - (message.note - basenote)
-                new_track.append(message.copy(note=inverted_note))
-            else:
+            if isinstance(message, MetaMessage):
                 new_track.append(message)
+            else:
+                if 'note' in dir(message):
+                    inverted_note = basenote - (message.note - basenote)
+                    new_track.append(message.copy(note=inverted_note, time=int(message.time * 2)))
+                else:
+                    new_track.append(message)
 
         inverted.tracks.append(new_track)
 
